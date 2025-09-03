@@ -37,7 +37,7 @@ jobs:
       - name: Rodar os testes
         # MUDANÇA: Navega para a pasta, define a variável e DEPOIS roda o teste
         run: |
-          cd MERN-Stack-Todo-List-App-master/backend
-          npm test
+         cd MERN-Stack-Todo-List-App-master/backend
+         npm test -- --forceExit
         env:
           NODE_OPTIONS: --openssl-legacy-provider
