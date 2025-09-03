@@ -1,0 +1,45 @@
+# Nome do nosso workflow
+name: CI Backend
+
+# Gatilhos: Define quando este workflow deve rodar automaticamente
+on:
+  # Roda quando houver um 'push' (envio de código)
+  push:
+    branches: [ main, develop ] # Apenas para os branches main e develop
+  # Roda também quando um Pull Request for aberto para esses branches
+  pull_request:
+    branches: [ main, develop ]
+
+# Jobs: Lista de "trabalhos" que o workflow vai executar
+jobs:
+  build-e-testar-backend:
+    # Define que o trabalho vai rodar em uma máquina virtual Linux (padrão do mercado)
+    runs-on: ubuntu-latest
+
+    # Passos: Sequência de ações que o job vai realizar
+    steps:
+      # 1º Passo: Baixa uma cópia do seu código para dentro da máquina virtual
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2º Passo: Instala e configura o ambiente Node.js na versão 18
+      - name: Setup do Node.js v18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 3º Passo: Instala as dependências do back-end
+      - name: Instalar dependências do Back-end
+        # Informa que este comando deve ser rodado dentro da pasta 'backend'
+        run: npm install
+        working-directory: ./backend
+
+      # 4º Passo: Roda os testes automatizados
+      - name: Rodar os testes
+        # Roda o 'npm test' também na pasta 'backend'
+        run: npm test
+        working-directory: ./backend
+        # IMPORTANTE: A máquina do GitHub também precisa da correção do SSL, 
+        # então definimos a variável de ambiente para o passo de teste.
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
