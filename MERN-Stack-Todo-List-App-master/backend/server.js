@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const todoRoutes = express.Router();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 let Todo = require('./todo.model');
 
 const app = express();
@@ -11,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://Fbor80:8iygjp43RY5Knw78@ac-22kfnrg-shard-00-00.0d9jqbo.mongodb.net:27017,ac-22kfnrg-shard-00-01.0d9jqbo.mongodb.net:27017,ac-22kfnrg-shard-00-02.0d9jqbo.mongodb.net:27017/todos?ssl=true&replicaSet=atlas-hif5rz-shard-0&authSource=admin&retryWrites=true&w=majority&appName=ITzBor', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 // Once the connection is established, callback
