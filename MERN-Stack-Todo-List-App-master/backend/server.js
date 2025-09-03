@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/todos', { useNewUrlParser: true });
+mongoose.connect('mongodb://Fbor80:8iygjp43RY5Knw78@ac-22kfnrg-shard-00-00.0d9jqbo.mongodb.net:27017,ac-22kfnrg-shard-00-01.0d9jqbo.mongodb.net:27017,ac-22kfnrg-shard-00-02.0d9jqbo.mongodb.net:27017/todos?ssl=true&replicaSet=atlas-hif5rz-shard-0&authSource=admin&retryWrites=true&w=majority&appName=ITzBor', { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 // Once the connection is established, callback
@@ -71,3 +71,4 @@ app.use('/todos', todoRoutes);
 app.listen( PORT, () => {
     console.log("Server is running on port " + PORT);
 });
+module.exports = app; 
