@@ -15,53 +15,52 @@ jobs:
     runs-on: ubuntu-latest
 
     
+  # Passos: Sequência de ações que o job vai realizar
     steps:
-      
+      # 1º Passo: Baixa uma cópia do seu código
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      
+      # 2º Passo: Instala e configura o ambiente Node.js na versão 18
       - name: Setup do Node.js v18
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      
+      # 3º Passo: Instala as dependências do back-end
       - name: Instalar dependências do Back-end
+        run: |
+          cd MERN-Stack-Todo-List-App-master/backend
+          npm install
 
+      # 4º Passo: Roda a análise de qualidade do código
       - name: Rodar Linter para Qualidade do Código
         run: |
           cd MERN-Stack-Todo-List-App-master/backend
           npm run lint
 
-
+      # 5º Passo: Roda os testes automatizados
+      - name: Rodar os testes
         run: |
           cd MERN-Stack-Todo-List-App-master/backend
-          npm install
-
-      # 4º Passo: Roda os testes automatizados
-      - name: Rodar os testes
-        
-        run: |
-         cd MERN-Stack-Todo-List-App-master/backend
-         npm test -- --forceExit
+          npm test -- --forceExit
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
-          - name: Notificar Sucesso no Discord
-            # Roda apenas se todos os passos anteriores deram certo
-            if: success()
-            uses: rjstone/discord-webhook-notify@v1
-            with:
-              webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              description: "✅ Sucesso! O pipeline do branch `${{ github.ref_name }}` foi concluído com sucesso."
-              color: "3066993" # Cor Azul
+      # 6º Passo: Notificação de Sucesso
+      - name: Notificar Sucesso no Discord
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          description: "✅ Sucesso! O pipeline do branch `${{ github.ref_name }}` foi concluído com sucesso."
+          color: "3066993"
 
-          - name: Notificar Falha no Discord
-            # Roda apenas se algum passo anterior falhou
-            if: failure()
-            uses: rjstone/discord-webhook-notify@v1
-            with:
-              webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              description: "❌ FALHA! O pipeline do branch `${{ github.ref_name }}` falhou. Verifique os logs no GitHub."
-              color: "15158332" # Cor Vermelha
+      # 7º Passo: Notificação de Falha
+      - name: Notificar Falha no Discord
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          description: "❌ FALHA! O pipeline do branch `${{ github.ref_name }}` falhou. Verifique os logs no GitHub."
+          color: "15158332"
