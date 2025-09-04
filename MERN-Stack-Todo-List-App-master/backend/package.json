@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
-  },
+     "start": "node server.js",
+  "test": "jest",
+  "lint": "eslint ."
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "mongoose": "^5.4.8"
   },
   "devDependencies": {
+    "eslint": "^9.34.0",
     "jest": "^30.1.3",
     "supertest": "^7.1.4"
   }
