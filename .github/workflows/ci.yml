@@ -1,41 +1,47 @@
 # Nome do nosso workflow
 name: CI Backend
 
-# Gatilhos: Define quando este workflow deve rodar automaticamente
+
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
 
-# Jobs: Lista de "trabalhos" que o workflow vai executar
+
 jobs:
   build-e-testar-backend:
-    # Define que o trabalho vai rodar em uma máquina virtual Linux
+    
     runs-on: ubuntu-latest
 
-    # Passos: Sequência de ações que o job vai realizar
+    
     steps:
-      # 1º Passo: Baixa uma cópia do seu código
+      
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # 2º Passo: Instala e configura o ambiente Node.js na versão 18
+      
       - name: Setup do Node.js v18
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # 3º Passo: Instala as dependências do back-end
+      
       - name: Instalar dependências do Back-end
-        # MUDANÇA: Navega para a pasta correta e DEPOIS roda o npm install
+
+      - name: Rodar Linter para Qualidade do Código
+        run: |
+          cd MERN-Stack-Todo-List-App-master/backend
+          npm run lint
+
+
         run: |
           cd MERN-Stack-Todo-List-App-master/backend
           npm install
 
       # 4º Passo: Roda os testes automatizados
       - name: Rodar os testes
-        # MUDANÇA: Navega para a pasta, define a variável e DEPOIS roda o teste
+        
         run: |
          cd MERN-Stack-Todo-List-App-master/backend
          npm test -- --forceExit
