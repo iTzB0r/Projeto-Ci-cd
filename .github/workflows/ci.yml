@@ -47,3 +47,21 @@ jobs:
          npm test -- --forceExit
         env:
           NODE_OPTIONS: --openssl-legacy-provider
+
+          - name: Notificar Sucesso no Discord
+            # Roda apenas se todos os passos anteriores deram certo
+            if: success()
+            uses: rjstone/discord-webhook-notify@v1
+            with:
+              webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+              description: "✅ Sucesso! O pipeline do branch `${{ github.ref_name }}` foi concluído com sucesso."
+              color: "3066993" # Cor Azul
+
+          - name: Notificar Falha no Discord
+            # Roda apenas se algum passo anterior falhou
+            if: failure()
+            uses: rjstone/discord-webhook-notify@v1
+            with:
+              webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+              description: "❌ FALHA! O pipeline do branch `${{ github.ref_name }}` falhou. Verifique os logs no GitHub."
+              color: "15158332" # Cor Vermelha
